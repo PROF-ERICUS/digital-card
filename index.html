@@ -21,6 +21,17 @@
   --shadow:rgba(0,0,0,0.35);
   --chip:rgba(255,255,255,0.06);
   --chipHover:rgba(255,255,255,0.12);
+
+  /* Responsive sizes */
+  --cardW:min(420px, 92vw);
+  --pad:clamp(14px, 3.5vw, 22px);
+  --radius:clamp(16px, 3.5vw, 22px);
+  --avatar:clamp(82px, 18vw, 110px);
+  --icon:clamp(38px, 10vw, 46px);
+  --iconFont:clamp(14px, 3.8vw, 16px);
+  --h2:clamp(18px, 4.8vw, 22px);
+  --title:clamp(12px, 3.3vw, 13px);
+  --body:clamp(12px, 3.2vw, 13px);
 }
 
 *{ box-sizing:border-box; }
@@ -34,11 +45,11 @@ body{
   align-items:center;
   min-height:100vh;
   color:var(--text);
-  padding:18px;
+  padding:clamp(12px, 3.2vw, 22px);
   transition:background .35s ease, color .35s ease;
 }
 
-/* ✅ LIGHT MODE OVERRIDES */
+/* ✅ LIGHT MODE */
 body.light{
   --bg:linear-gradient(135deg,#f0f2f5,#e4e9f2,#dce3ec);
   --glass:rgba(255,255,255,0.75);
@@ -51,26 +62,29 @@ body.light{
 }
 
 .card{
-  width:min(400px, 94vw);
+  width:var(--cardW);
+  max-width:100%;
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
   background:var(--glass);
-  border-radius:22px;
-  padding:22px;
+  border-radius:var(--radius);
+  padding:var(--pad);
   border:1px solid var(--border);
   box-shadow:0 12px 34px var(--shadow);
   text-align:center;
   transition:0.35s ease;
 }
 
-.card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 18px 46px rgba(0,0,0,0.35);
+@media (hover:hover){
+  .card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 46px rgba(0,0,0,0.30);
+  }
 }
 
 .profile-img{
-  width:102px;
-  height:102px;
+  width:var(--avatar);
+  height:var(--avatar);
   border-radius:50%;
   object-fit:cover;
   border:3px solid rgba(255,255,255,0.92);
@@ -82,19 +96,20 @@ body.light .profile-img{
   border:3px solid rgba(30,60,114,0.22);
 }
 
-h2{ margin:3px 0 4px; font-size:22px; }
-.title{ font-size:13px; opacity:0.92; }
+h2{ margin:3px 0 4px; font-size:var(--h2); }
+.title{ font-size:var(--title); opacity:0.92; }
 
 .social{
   margin:12px 0 4px;
   display:flex;
   justify-content:center;
-  gap:12px;
+  gap:clamp(10px, 3vw, 12px);
+  flex-wrap:wrap;
 }
 
 .social a{
-  width:34px;
-  height:34px;
+  width:clamp(32px, 9vw, 36px);
+  height:clamp(32px, 9vw, 36px);
   display:grid;
   place-items:center;
   border-radius:50%;
@@ -103,7 +118,7 @@ h2{ margin:3px 0 4px; font-size:22px; }
   border:1px solid var(--border);
   background:var(--chip);
   transition:0.25s ease;
-  font-size:16px;
+  font-size:clamp(14px, 4vw, 16px);
 }
 .social a:hover{ transform:scale(1.10); background:var(--chipHover); }
 
@@ -111,21 +126,22 @@ h2{ margin:3px 0 4px; font-size:22px; }
   margin:14px 0 0;
   display:flex;
   justify-content:center;
-  gap:10px;
+  gap:clamp(8px, 2.5vw, 10px);
   flex-wrap:wrap;
 }
 
 .icon-row button{
-  width:44px;
-  height:44px;
+  width:var(--icon);
+  height:var(--icon);
   border:none;
   border-radius:50%;
   cursor:pointer;
   background:linear-gradient(135deg,var(--primary),var(--secondary));
   color:white;
-  font-size:16px;
+  font-size:var(--iconFont);
   transition:0.25s ease;
   box-shadow:0 10px 20px rgba(0,0,0,0.18);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .icon-row button:hover{
@@ -144,13 +160,13 @@ body.light .icon-row button.active{
 .section{
   display:none;
   text-align:left;
-  font-size:13px;
+  font-size:var(--body);
   margin-top:14px;
-  padding:12px;
-  border-radius:16px;
+  padding:clamp(10px, 3vw, 12px);
+  border-radius:clamp(12px, 3vw, 16px);
   border:1px solid var(--border);
   background:var(--chip);
-  max-height:280px;
+  max-height:min(52vh, 320px);
   overflow:auto;
   animation:fade 0.35s ease;
 }
@@ -163,7 +179,7 @@ body.light .icon-row button.active{
 .section strong{
   display:block;
   margin:4px 0 10px;
-  font-size:14px;
+  font-size:clamp(13px, 3.6vw, 14px);
   letter-spacing:0.2px;
 }
 
@@ -195,8 +211,8 @@ body.light .icon-row button.active{
   text-align:center;
 }
 .qr img{
-  width:110px;
-  height:110px;
+  width:clamp(92px, 26vw, 120px);
+  height:clamp(92px, 26vw, 120px);
   background:#fff;
   padding:6px;
   border-radius:12px;
@@ -206,16 +222,18 @@ body.light .icon-row button.active{
 
 .footer{
   margin-top:12px;
-  font-size:11px;
-  opacity:0.82;
+  font-size:clamp(10px, 3vw, 11px);
+  opacity:0.86;
   display:flex;
   justify-content:center;
   gap:8px;
   align-items:center;
   color:var(--muted);
+  flex-wrap:wrap;
+  text-align:center;
 }
 
-/* ✅ small toggle button */
+/* ✅ floating mode toggle (always accessible) */
 .mode-btn{
   position:fixed;
   top:14px;
@@ -231,14 +249,19 @@ body.light .icon-row button.active{
   cursor:pointer;
   transition:.25s ease;
   box-shadow:0 10px 20px rgba(0,0,0,0.15);
+  z-index:999;
 }
 .mode-btn:hover{ transform:scale(1.06); background:var(--chipHover); }
+
+/* ✅ EXTRA SMALL PHONES */
+@media (max-width:360px){
+  .section{ max-height:56vh; }
+}
 </style>
 </head>
 
 <body>
 
-<!-- ✅ Dark/Light Toggle Button -->
 <button class="mode-btn" id="modeBtn" title="Toggle Dark/Light Mode">
   <i class="fa-solid fa-moon"></i>
 </button>
@@ -436,16 +459,12 @@ function setMode(isLight){
   document.body.classList.toggle("light", isLight);
   localStorage.setItem(MODE_KEY, isLight ? "light" : "dark");
 
-  // Change icon
   const icon = document.querySelector("#modeBtn i");
-  if(icon){
-    icon.className = isLight ? "fa-solid fa-sun" : "fa-solid fa-moon";
-  }
+  if(icon) icon.className = isLight ? "fa-solid fa-sun" : "fa-solid fa-moon";
 }
 
 function toggleMode(){
-  const isLight = document.body.classList.contains("light");
-  setMode(!isLight);
+  setMode(!document.body.classList.contains("light"));
 }
 
 function show(id){
@@ -466,7 +485,7 @@ window.addEventListener('load', () => {
   const savedMode = localStorage.getItem(MODE_KEY) || "dark";
   setMode(savedMode === "light");
 
-  // Hook mode button
+  // Mode button click
   document.getElementById("modeBtn").addEventListener("click", toggleMode);
 
   // Restore last section
