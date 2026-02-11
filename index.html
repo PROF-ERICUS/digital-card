@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eric Andoh | Professional Digital Identity</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root{
+  --primary:#1e3c72;
+  --secondary:#2a5298;
+
+  /* Dark defaults */
+  --bg:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  --glass:rgba(255,255,255,0.12);
+  --text:#ffffff;
+  --muted:rgba(255,255,255,0.88);
+  --border:rgba(255,255,255,0.20);
+  --shadow:rgba(0,0,0,0.35);
+  --chip:rgba(255,255,255,0.06);
+  --chipHover:rgba(255,255,255,0.12);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  font-family:Segoe UI, system-ui, -apple-system, sans-serif;
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  color:var(--text);
+  padding:18px;
+  transition:background .35s ease, color .35s ease;
+}
+
+/* ✅ LIGHT MODE OVERRIDES */
+body.light{
+  --bg:linear-gradient(135deg,#f0f2f5,#e4e9f2,#dce3ec);
+  --glass:rgba(255,255,255,0.75);
+  --text:#111;
+  --muted:rgba(0,0,0,0.72);
+  --border:rgba(0,0,0,0.10);
+  --shadow:rgba(0,0,0,0.14);
+  --chip:rgba(0,0,0,0.04);
+  --chipHover:rgba(0,0,0,0.07);
+}
+
+.card{
+  width:min(400px, 94vw);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  background:var(--glass);
+  border-radius:22px;
+  padding:22px;
+  border:1px solid var(--border);
+  box-shadow:0 12px 34px var(--shadow);
+  text-align:center;
+  transition:0.35s ease;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 18px 46px rgba(0,0,0,0.35);
+}
+
+.profile-img{
+  width:102px;
+  height:102px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid rgba(255,255,255,0.92);
+  margin-bottom:10px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.25);
+}
+
+body.light .profile-img{
+  border:3px solid rgba(30,60,114,0.22);
+}
+
+h2{ margin:3px 0 4px; font-size:22px; }
+.title{ font-size:13px; opacity:0.92; }
+
+.social{
+  margin:12px 0 4px;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+}
+
+.social a{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:var(--text);
+  text-decoration:none;
+  border:1px solid var(--border);
+  background:var(--chip);
+  transition:0.25s ease;
+  font-size:16px;
+}
+.social a:hover{ transform:scale(1.10); background:var(--chipHover); }
+
+.icon-row{
+  margin:14px 0 0;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.icon-row button{
+  width:44px;
+  height:44px;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:white;
+  font-size:16px;
+  transition:0.25s ease;
+  box-shadow:0 10px 20px rgba(0,0,0,0.18);
+}
+
+.icon-row button:hover{
+  transform:translateY(-2px) scale(1.06);
+}
+
+.icon-row button.active{
+  outline:2px solid rgba(255,255,255,0.85);
+  outline-offset:3px;
+}
+body.light .icon-row button.active{
+  outline:2px solid rgba(0,0,0,0.55);
+  outline-offset:3px;
+}
+
+.section{
+  display:none;
+  text-align:left;
+  font-size:13px;
+  margin-top:14px;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--chip);
+  max-height:280px;
+  overflow:auto;
+  animation:fade 0.35s ease;
+}
+
+@keyframes fade{
+  from{ opacity:0; transform:translateY(10px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.section strong{
+  display:block;
+  margin:4px 0 10px;
+  font-size:14px;
+  letter-spacing:0.2px;
+}
+
+.section p{
+  margin:10px 0;
+  color:var(--muted);
+  line-height:1.45;
+}
+
+.section b{ color:var(--text); }
+
+.list{
+  margin:8px 0 0;
+  padding-left:18px;
+}
+.list li{
+  margin:6px 0;
+  color:var(--muted);
+}
+
+.kv{
+  margin:10px 0;
+}
+.kv .k{ font-weight:700; color:var(--text); }
+.kv .v{ color:var(--muted); }
+
+.qr{
+  margin-top:16px;
+  text-align:center;
+}
+.qr img{
+  width:110px;
+  height:110px;
+  background:#fff;
+  padding:6px;
+  border-radius:12px;
+  box-shadow:0 10px 18px rgba(0,0,0,0.20);
+}
+.qr small{ display:block; margin-top:6px; opacity:0.9; color:var(--muted); }
+
+.footer{
+  margin-top:12px;
+  font-size:11px;
+  opacity:0.82;
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  align-items:center;
+  color:var(--muted);
+}
+
+/* ✅ small toggle button */
+.mode-btn{
+  position:fixed;
+  top:14px;
+  right:14px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:var(--chip);
+  color:var(--text);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:.25s ease;
+  box-shadow:0 10px 20px rgba(0,0,0,0.15);
+}
+.mode-btn:hover{ transform:scale(1.06); background:var(--chipHover); }
+</style>
+</head>
+
+<body>
+
+<!-- ✅ Dark/Light Toggle Button -->
+<button class="mode-btn" id="modeBtn" title="Toggle Dark/Light Mode">
+  <i class="fa-solid fa-moon"></i>
+</button>
+
+<div class="card">
+
+  <img src="eric.jpg" class="profile-img" alt="Eric Andoh"
+       onerror="this.src='https://via.placeholder.com/150';">
+
+  <h2>Eric Andoh</h2>
+  <div class="title">IT Student | Front-End Developer | Graphic Designer</div>
+
+  <div class="social">
+    <a href="mailto:1700148287@live.gctu.edu.gh" title="Send Email"><i class="fa-solid fa-envelope"></i></a>
+    <a href="https://wa.me/233542044490" target="_blank" title="Chat on WhatsApp" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="https://github.com/PROF-ERICUS" target="_blank" title="View GitHub" rel="noopener"><i class="fa-brands fa-github"></i></a>
+    <a href="https://prof-ericus.github.io/MULTISCH-GPA/" target="_blank" title="Open Project" rel="noopener"><i class="fa-solid fa-diagram-project"></i></a>
+    <a href="https://www.linkedin.com/in/eric-andoh-49ab01335" target="_blank" title="View LinkedIn" rel="noopener"><i class="fa-brands fa-linkedin"></i></a>
+  </div>
+
+  <div class="icon-row">
+    <button data-target="profile" onclick="show('profile')" title="Professional Profile"><i class="fa-solid fa-user"></i></button>
+    <button data-target="education" onclick="show('education')" title="Education & Certifications"><i class="fa-solid fa-graduation-cap"></i></button>
+    <button data-target="experience" onclick="show('experience')" title="Work Experience & Achievement"><i class="fa-solid fa-briefcase"></i></button>
+    <button data-target="leadership" onclick="show('leadership')" title="Leadership Roles"><i class="fa-solid fa-users"></i></button>
+    <button data-target="skills" onclick="show('skills')" title="Technical Skills"><i class="fa-solid fa-code"></i></button>
+    <button data-target="references" onclick="show('references')" title="References"><i class="fa-solid fa-address-book"></i></button>
+  </div>
+
+  <div id="profile" class="section">
+    <strong><i class="fa-solid fa-circle-info"></i> Professional Summary</strong>
+    <p>
+      A self-motivated and passionate IT student currently pursuing a Bachelor of Science in Information Technology at
+      Ghana Communication Technology University. Skilled in front-end development with a strong focus on UI/UX design,
+      modern web technologies, and graphic design. Proven ability to build real-world systems including attendance
+      platforms, academic calculators, and interactive dashboards. Also, a student leader with excellent communication,
+      teamwork, and teaching experience.
+    </p>
+
+    <p class="kv"><span class="k"><i class="fa-solid fa-location-dot"></i> Location:</span> <span class="v">Accra, Ghana</span></p>
+    <p class="kv"><span class="k"><i class="fa-solid fa-phone"></i> Phone:</span> <span class="v">0542044490</span></p>
+    <p class="kv"><span class="k"><i class="fa-solid fa-envelope"></i> Email:</span> <span class="v">1700148287@live.gctu.edu.gh</span></p>
+  </div>
+
+  <div id="education" class="section">
+    <strong><i class="fa-solid fa-graduation-cap"></i> Education</strong>
+    <p><b>BSc Information Technology</b><br>
+      Ghana Communication Technology University – Accra, Ghana<br>
+      <span style="opacity:.9;">2022 – Present (Expected Graduation: 2027)</span>
+    </p>
+
+    <p><b>Electricals & Electronics Engineering Technology</b><br>
+      Kikam Technical Institute – Kikam, Ghana<br>
+      <span style="opacity:.9;">Completed: June 2017</span>
+    </p>
+
+    <p><b>Basic Education Certificate Examination (BECE)</b><br>
+      Emmanuel Preparatory School – Abura (Western Region), Ghana<br>
+      <span style="opacity:.9;">Completed: June 2014</span>
+    </p>
+
+    <strong style="margin-top:12px;"><i class="fa-solid fa-certificate"></i> Certifications</strong>
+    <ul class="list">
+      <li>Honors Diploma in Networking Engineering – Soul Food ICT College (Completed: June 2021)</li>
+      <li>Honors Diploma in Digital Security – Soul Food ICT College (Completed: September 2021)</li>
+      <li>Certificate of Completion – Tech Accelerate 2024 (Lady Margaret Foundation)</li>
+      <li>Certificate of Completion – Effective Presentation (HP LIFE Online Course) – 2025</li>
+    </ul>
+  </div>
+
+  <div id="experience" class="section">
+    <strong><i class="fa-solid fa-briefcase"></i> Experience</strong>
+
+    <p><b>Graphic Designer</b><br>
+      Ericsvault Hub – Accra, Ghana | Jan 2025 – Present
+    </p>
+    <ul class="list">
+      <li>Designed social media visuals to boost brand awareness.</li>
+      <li>Conducted design research to support creative strategies.</li>
+      <li>Created logos, product illustrations, and layouts for websites and print.</li>
+    </ul>
+
+    <p><b>Computer Teacher</b><br>
+      Antah Academy – Accra-Abeka, Ghana | Jan 2021 – Jan 2025
+    </p>
+    <ul class="list">
+      <li>Taught basic computer hardware/software in classroom settings.</li>
+      <li>Trained students on Microsoft Office, Adobe Creative Cloud, and other tools.</li>
+      <li>Taught internet safety and responsible online behavior.</li>
+      <li>Led hands-on activities to improve student engagement.</li>
+      <li>Provided technical support to students with computer issues.</li>
+    </ul>
+
+    <strong style="margin-top:12px;"><i class="fa-solid fa-award"></i> Achievement</strong>
+    <p><b>Best Graphic Designer of the Year (2022)</b><br>
+      Ghana Talent and Achievement Awards
+    </p>
+  </div>
+
+  <div id="leadership" class="section">
+    <strong><i class="fa-solid fa-users"></i> Leadership & Positions Held</strong>
+
+    <p><b>Course Representative – GCTU</b> (2023 – Present)<br>
+      Coordinate communication between students and lecturers.<br>
+      Support academic activities and follow up on announcements.<br>
+      Ensure class concerns are addressed.
+    </p>
+
+    <p><b>Public Relations Officer (PRO) – Concerned Youth of Enmokanwo</b> (2024 – Present)<br>
+      Handle communication and public announcements for the group.<br>
+      Share updates, event notices, and important information with members and the community.<br>
+      Support leadership in planning youth activities and engagements.
+    </p>
+
+    <p><b>Committee Chair – Entrepreneurship Club, GCTU</b> (2024 – 2025)<br>
+      Lead club activities and guide members in business-related projects.<br>
+      Support students with ideas and help drive the club’s goals.
+    </p>
+
+    <p><b>Vice President – Ghana National Association of Adventist Students (GNAAS)</b><br>
+      Kikam Technical Institute (2016 – 2017)<br>
+      Assisted the President in leading association activities and student welfare programs.<br>
+      Coordinated meetings, events, and maintained unity within the association.
+    </p>
+  </div>
+
+  <div id="skills" class="section">
+    <strong><i class="fa-solid fa-code"></i> Skills</strong>
+
+    <p class="kv"><span class="k"><i class="fa-solid fa-laptop-code"></i> Programming:</span>
+      <span class="v">HTML, CSS, JavaScript</span>
+    </p>
+
+    <p class="kv"><span class="k"><i class="fa-solid fa-database"></i> Database Management:</span>
+      <span class="v">MySQL, Local Storage</span>
+    </p>
+
+    <p class="kv"><span class="k"><i class="fa-solid fa-screwdriver-wrench"></i> Tools & Tech:</span>
+      <span class="v">VS Code, Git, Draw.io, Adobe Creative Cloud</span>
+    </p>
+
+    <p class="kv"><span class="k"><i class="fa-solid fa-pen-nib"></i> Design & UI/UX:</span>
+      <span class="v">UI/UX Design, Responsive Layouts, Social Media Graphics</span>
+    </p>
+
+    <p class="kv"><span class="k"><i class="fa-solid fa-lightbulb"></i> Other Skills:</span>
+      <span class="v">Problem Solving, Troubleshooting, System Setup & Installation</span>
+    </p>
+
+    <strong style="margin-top:10px;"><i class="fa-solid fa-people-group"></i> Soft Skills</strong>
+    <p>Communication, Teamwork, Time Management, Leadership</p>
+
+    <strong><i class="fa-solid fa-language"></i> Languages</strong>
+    <p>English, Twi, Nzema</p>
+  </div>
+
+  <div id="references" class="section">
+    <strong><i class="fa-solid fa-address-book"></i> Professional References</strong>
+
+    <p><b>Dr. Josiah Andor</b><br>
+      Senior Lecturer, Valley View University<br>
+      <i class="fa-solid fa-phone"></i> +233 20 890 5912<br>
+      <i class="fa-solid fa-envelope"></i> joeandor@gmail.com
+    </p>
+
+    <p><b>Mr. Samuel Nortey</b><br>
+      Senior Lecturer, Ghana Communication Technology University<br>
+      <i class="fa-solid fa-phone"></i> +233 20 269 8193<br>
+      <i class="fa-solid fa-envelope"></i> snortey@gtuc.edu.gh
+    </p>
+  </div>
+
+  <div class="qr">
+    <img
+      src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://www.linkedin.com/in/eric-andoh-49ab01335"
+      alt="LinkedIn QR Code"
+    >
+    <small><i class="fa-solid fa-qrcode"></i> Scan to open LinkedIn</small>
+  </div>
+
+  <div class="footer">
+    <i class="fa-solid fa-id-card"></i>
+    <span>Professional Digital Identity • Accra, Ghana</span>
+  </div>
+
+</div>
+
+<script>
+/* ✅ Persist last open section even after refresh/close */
+const SECTION_KEY = "eric_identity_active_section";
+/* ✅ Persist dark/light mode */
+const MODE_KEY = "eric_identity_mode";
+
+function setMode(isLight){
+  document.body.classList.toggle("light", isLight);
+  localStorage.setItem(MODE_KEY, isLight ? "light" : "dark");
+
+  // Change icon
+  const icon = document.querySelector("#modeBtn i");
+  if(icon){
+    icon.className = isLight ? "fa-solid fa-sun" : "fa-solid fa-moon";
+  }
+}
+
+function toggleMode(){
+  const isLight = document.body.classList.contains("light");
+  setMode(!isLight);
+}
+
+function show(id){
+  document.querySelectorAll('.section').forEach(s => s.style.display='none');
+  document.querySelectorAll('.icon-row button').forEach(b => b.classList.remove('active'));
+
+  const el = document.getElementById(id);
+  if(el) el.style.display = 'block';
+
+  const btn = document.querySelector(`.icon-row button[data-target="${id}"]`);
+  if(btn) btn.classList.add('active');
+
+  localStorage.setItem(SECTION_KEY, id);
+}
+
+window.addEventListener('load', () => {
+  // Restore mode
+  const savedMode = localStorage.getItem(MODE_KEY) || "dark";
+  setMode(savedMode === "light");
+
+  // Hook mode button
+  document.getElementById("modeBtn").addEventListener("click", toggleMode);
+
+  // Restore last section
+  const savedSection = localStorage.getItem(SECTION_KEY) || "profile";
+  show(savedSection);
+});
+</script>
+
+</body>
+</html>
