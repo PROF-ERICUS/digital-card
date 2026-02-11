@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Eric Andoh | Professional Digital Identity</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -22,38 +22,45 @@
   --chip:rgba(255,255,255,0.06);
   --chipHover:rgba(255,255,255,0.12);
 
-  /* Responsive sizes */
-  --cardW:min(520px, 94vw);
-  --pad:clamp(14px, 3.5vw, 22px);
-  --radius:clamp(16px, 3.5vw, 22px);
-  --avatar:clamp(80px, 18vw, 110px);
-  --icon:clamp(38px, 10vw, 46px);
-  --iconFont:clamp(14px, 3.8vw, 16px);
-  --h2:clamp(18px, 4.8vw, 22px);
-  --title:clamp(12px, 3.3vw, 13px);
-  --body:clamp(12px, 3.2vw, 13px);
+  /* Fluid sizing */
+  --pad:clamp(12px, 3.2vw, 22px);
+  --radius:clamp(14px, 3.5vw, 22px);
+  --avatar:clamp(72px, 16vw, 110px);
+  --h2:clamp(18px, 5.2vw, 24px);
+  --title:clamp(12px, 3.6vw, 13px);
+  --body:clamp(12px, 3.6vw, 13px);
+  --icon:clamp(36px, 10.5vw, 46px);
+  --iconFont:clamp(14px, 4vw, 16px);
+  --soc:clamp(30px, 9.5vw, 36px);
+
+  /* Layout limits */
+  --maxW:520px;
 }
 
 *{ box-sizing:border-box; }
+
+html, body{
+  height:100%;
+}
 
 body{
   margin:0;
   font-family:Segoe UI, system-ui, -apple-system, sans-serif;
   background:var(--bg);
-  min-height:100vh;
   color:var(--text);
-  padding:clamp(12px, 3.2vw, 22px);
   transition:background .35s ease, color .35s ease;
 
+  /* ✅ Mobile-safe centering */
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:stretch;
+  padding:var(--pad);
 }
 
-/* ✅ LIGHT MODE */
+/* ✅ Light mode */
 body.light{
   --bg:linear-gradient(135deg,#f0f2f5,#e4e9f2,#dce3ec);
-  --glass:rgba(255,255,255,0.75);
+  --glass:rgba(255,255,255,0.78);
   --text:#111;
   --muted:rgba(0,0,0,0.72);
   --border:rgba(0,0,0,0.10);
@@ -62,34 +69,38 @@ body.light{
   --chipHover:rgba(0,0,0,0.07);
 }
 
+/* ✅ Card fills available height on small screens */
 .card{
-  width:var(--cardW);
+  width:min(var(--maxW), 100%);
   max-width:100%;
+  margin:auto;
+
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
   background:var(--glass);
   border-radius:var(--radius);
-  padding:var(--pad);
   border:1px solid var(--border);
   box-shadow:0 12px 34px var(--shadow);
+  padding:var(--pad);
   text-align:center;
-  transition:0.35s ease;
   position:relative;
 
-  /* ✅ Let card grow naturally */
-  height:auto;
-  max-height:calc(100vh - (clamp(12px, 3.2vw, 22px) * 2));
+  /* Key: make internal parts fit + scroll properly */
   display:flex;
   flex-direction:column;
+  min-height:0;              /* ✅ critical for overflow children */
+  height:100%;
 }
 
-@media (hover:hover){
-  .card:hover{
-    transform:translateY(-3px);
-    box-shadow:0 18px 46px rgba(0,0,0,0.30);
+/* On larger screens, cap height nicely */
+@media (min-width:600px){
+  .card{
+    height:auto;
+    max-height:calc(100vh - (var(--pad) * 2));
   }
 }
 
+/* Avatar */
 .profile-img{
   width:var(--avatar);
   height:var(--avatar);
@@ -107,17 +118,18 @@ body.light .profile-img{
 h2{ margin:3px 0 4px; font-size:var(--h2); }
 .title{ font-size:var(--title); opacity:0.92; }
 
+/* Social icons */
 .social{
-  margin:12px 0 4px;
+  margin:10px 0 4px;
   display:flex;
   justify-content:center;
-  gap:clamp(10px, 3vw, 12px);
+  gap:clamp(8px, 2.8vw, 12px);
   flex-wrap:wrap;
 }
 
 .social a{
-  width:clamp(32px, 9vw, 36px);
-  height:clamp(32px, 9vw, 36px);
+  width:var(--soc);
+  height:var(--soc);
   display:grid;
   place-items:center;
   border-radius:50%;
@@ -126,15 +138,16 @@ h2{ margin:3px 0 4px; font-size:var(--h2); }
   border:1px solid var(--border);
   background:var(--chip);
   transition:0.25s ease;
-  font-size:clamp(14px, 4vw, 16px);
+  font-size:clamp(14px, 4.2vw, 16px);
 }
-.social a:hover{ transform:scale(1.10); background:var(--chipHover); }
+.social a:hover{ transform:scale(1.08); background:var(--chipHover); }
 
+/* Menu icons */
 .icon-row{
-  margin:14px 0 10px;
+  margin:12px 0 10px;
   display:flex;
   justify-content:center;
-  gap:clamp(8px, 2.5vw, 10px);
+  gap:clamp(7px, 2.5vw, 10px);
   flex-wrap:wrap;
 }
 
@@ -149,11 +162,7 @@ h2{ margin:3px 0 4px; font-size:var(--h2); }
   font-size:var(--iconFont);
   transition:0.25s ease;
   box-shadow:0 10px 20px rgba(0,0,0,0.18);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.icon-row button:hover{
-  transform:translateY(-2px) scale(1.06);
+  -webkit-tap-highlight-color:transparent;
 }
 
 .icon-row button.active{
@@ -164,25 +173,27 @@ body.light .icon-row button.active{
   outline:2px solid rgba(0,0,0,0.55);
 }
 
-/* ✅ Scroll container */
+/* ✅ Scroll area takes remaining space */
 .content{
   flex:1;
+  min-height:0;              /* ✅ critical */
   overflow:auto;
   padding-right:6px;
   scroll-behavior:smooth;
+
+  /* ✅ prevent footer being hidden under browser bars */
+  padding-bottom:10px;
 }
 
-/* ✅ Make scrolling look clean */
+/* Better scrollbar (optional) */
 .content::-webkit-scrollbar{ width:8px; }
 .content::-webkit-scrollbar-thumb{
   background:rgba(255,255,255,0.25);
   border-radius:999px;
 }
-body.light .content::-webkit-scrollbar-thumb{
-  background:rgba(0,0,0,0.18);
-}
+body.light .content::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.18); }
 
-/* ✅ Section animation on show */
+/* Section */
 .section{
   display:none;
   text-align:left;
@@ -191,43 +202,32 @@ body.light .content::-webkit-scrollbar-thumb{
   border-radius:clamp(12px, 3vw, 16px);
   border:1px solid var(--border);
   background:var(--chip);
-  animation:pop 0.35s ease;
-  transform-origin:top;
+  animation:pop .25s ease;
 }
 
 @keyframes pop{
-  from{ opacity:0; transform:translateY(8px) scale(0.98); }
+  from{ opacity:0; transform:translateY(6px) scale(0.99); }
   to{ opacity:1; transform:translateY(0) scale(1); }
 }
 
 .section strong{
   display:block;
   margin:4px 0 10px;
-  font-size:clamp(13px, 3.6vw, 14px);
+  font-size:clamp(13px, 3.8vw, 14px);
   letter-spacing:0.2px;
 }
 
-.section p{
-  margin:10px 0;
-  color:var(--muted);
-  line-height:1.55;
-}
-
+.section p{ margin:10px 0; color:var(--muted); line-height:1.55; }
 .section b{ color:var(--text); }
 
-.list{
-  margin:8px 0 0;
-  padding-left:18px;
-}
-.list li{
-  margin:6px 0;
-  color:var(--muted);
-}
+.list{ margin:8px 0 0; padding-left:18px; }
+.list li{ margin:6px 0; color:var(--muted); }
 
 .kv{ margin:10px 0; }
 .kv .k{ font-weight:700; color:var(--text); }
 .kv .v{ color:var(--muted); }
 
+/* Footer stays visible (not under content) */
 .footer{
   margin-top:10px;
   font-size:clamp(10px, 3vw, 11px);
@@ -239,16 +239,15 @@ body.light .content::-webkit-scrollbar-thumb{
   color:var(--muted);
   flex-wrap:wrap;
   text-align:center;
-  padding-top:6px;
 }
 
-/* ✅ Mode toggle (inside card, top-right) */
+/* ✅ Dark/Light toggle placed safely (doesn't overlap) */
 .mode-btn{
   position:absolute;
-  top:12px;
-  right:12px;
-  width:42px;
-  height:42px;
+  top:10px;
+  right:10px;
+  width:40px;
+  height:40px;
   border-radius:50%;
   border:1px solid var(--border);
   background:var(--chip);
@@ -257,19 +256,15 @@ body.light .content::-webkit-scrollbar-thumb{
   place-items:center;
   cursor:pointer;
   transition:.25s ease;
-  box-shadow:0 10px 20px rgba(0,0,0,0.12);
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color:transparent;
   z-index:10;
 }
 .mode-btn:hover{ transform:scale(1.06); background:var(--chipHover); }
 
-/* ✅ Mobile: make it full height nicely */
-@media (max-width:520px){
-  body{ align-items:stretch; }
-  .card{
-    max-height:none;
-    min-height:calc(100vh - (clamp(12px, 3.2vw, 22px) * 2));
-  }
+/* ✅ Small phones: slightly tighter spacing */
+@media (max-width:360px){
+  .social{ margin-top:8px; }
+  .icon-row{ margin-top:10px; }
 }
 </style>
 </head>
@@ -305,7 +300,6 @@ body.light .content::-webkit-scrollbar-thumb{
     <button data-target="references" onclick="show('references')" title="References"><i class="fa-solid fa-address-book"></i></button>
   </div>
 
-  <!-- ✅ Scroll area -->
   <div class="content" id="content">
 
     <div id="profile" class="section">
@@ -467,7 +461,6 @@ const MODE_KEY = "eric_identity_mode";
 function setMode(isLight){
   document.body.classList.toggle("light", isLight);
   localStorage.setItem(MODE_KEY, isLight ? "light" : "dark");
-
   const icon = document.querySelector("#modeBtn i");
   if(icon) icon.className = isLight ? "fa-solid fa-sun" : "fa-solid fa-moon";
 }
@@ -477,30 +470,29 @@ function toggleMode(){
 }
 
 function show(id){
-  // hide all sections
   document.querySelectorAll('.section').forEach(s => s.style.display='none');
-  // remove active from buttons
   document.querySelectorAll('.icon-row button').forEach(b => b.classList.remove('active'));
 
   const el = document.getElementById(id);
-  if(el){
-    el.style.display = 'block';
-    // ✅ always start at top of content when switching tabs
-    document.getElementById("content").scrollTop = 0;
-  }
+  if(el) el.style.display = 'block';
 
   const btn = document.querySelector(`.icon-row button[data-target="${id}"]`);
   if(btn) btn.classList.add('active');
+
+  // always start from top when switching
+  document.getElementById("content").scrollTop = 0;
 
   localStorage.setItem(SECTION_KEY, id);
 }
 
 window.addEventListener('load', () => {
+  // Restore theme
   const savedMode = localStorage.getItem(MODE_KEY) || "dark";
   setMode(savedMode === "light");
 
   document.getElementById("modeBtn").addEventListener("click", toggleMode);
 
+  // Restore last section
   const savedSection = localStorage.getItem(SECTION_KEY) || "profile";
   show(savedSection);
 });
