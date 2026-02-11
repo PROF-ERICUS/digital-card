@@ -23,10 +23,10 @@
   --chipHover:rgba(255,255,255,0.12);
 
   /* Responsive sizes */
-  --cardW:min(420px, 92vw);
+  --cardW:min(420px, 94vw);
   --pad:clamp(14px, 3.5vw, 22px);
   --radius:clamp(16px, 3.5vw, 22px);
-  --avatar:clamp(82px, 18vw, 110px);
+  --avatar:clamp(80px, 18vw, 110px);
   --icon:clamp(38px, 10vw, 46px);
   --iconFont:clamp(14px, 3.8vw, 16px);
   --h2:clamp(18px, 4.8vw, 22px);
@@ -40,13 +40,16 @@ body{
   margin:0;
   font-family:Segoe UI, system-ui, -apple-system, sans-serif;
   background:var(--bg);
-  display:flex;
-  justify-content:center;
-  align-items:center;
   min-height:100vh;
   color:var(--text);
   padding:clamp(12px, 3.2vw, 22px);
   transition:background .35s ease, color .35s ease;
+
+  /* ✅ Stack layout + allow content scroll */
+  display:flex;
+  justify-content:center;
+  align-items:stretch;
+  overflow:hidden;
 }
 
 /* ✅ LIGHT MODE */
@@ -73,11 +76,17 @@ body.light{
   box-shadow:0 12px 34px var(--shadow);
   text-align:center;
   transition:0.35s ease;
+
+  /* ✅ make card fill height and scroll inside */
+  height:calc(100vh - (clamp(12px, 3.2vw, 22px) * 2));
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
 }
 
 @media (hover:hover){
   .card:hover{
-    transform:translateY(-5px);
+    transform:translateY(-3px);
     box-shadow:0 18px 46px rgba(0,0,0,0.30);
   }
 }
@@ -88,7 +97,7 @@ body.light{
   border-radius:50%;
   object-fit:cover;
   border:3px solid rgba(255,255,255,0.92);
-  margin-bottom:10px;
+  margin:0 auto 10px;
   box-shadow:0 10px 20px rgba(0,0,0,0.25);
 }
 
@@ -123,7 +132,7 @@ h2{ margin:3px 0 4px; font-size:var(--h2); }
 .social a:hover{ transform:scale(1.10); background:var(--chipHover); }
 
 .icon-row{
-  margin:14px 0 0;
+  margin:14px 0 10px;
   display:flex;
   justify-content:center;
   gap:clamp(8px, 2.5vw, 10px);
@@ -154,20 +163,25 @@ h2{ margin:3px 0 4px; font-size:var(--h2); }
 }
 body.light .icon-row button.active{
   outline:2px solid rgba(0,0,0,0.55);
-  outline-offset:3px;
 }
 
+/* ✅ SCROLL AREA (content stack) */
+.content{
+  flex:1;
+  overflow:auto;
+  padding-right:6px; /* small space for scrollbar */
+}
+
+/* Sections now live inside .content */
 .section{
   display:none;
   text-align:left;
   font-size:var(--body);
-  margin-top:14px;
+  margin-top:0;
   padding:clamp(10px, 3vw, 12px);
   border-radius:clamp(12px, 3vw, 16px);
   border:1px solid var(--border);
   background:var(--chip);
-  max-height:min(52vh, 320px);
-  overflow:auto;
   animation:fade 0.35s ease;
 }
 
@@ -200,28 +214,12 @@ body.light .icon-row button.active{
   color:var(--muted);
 }
 
-.kv{
-  margin:10px 0;
-}
+.kv{ margin:10px 0; }
 .kv .k{ font-weight:700; color:var(--text); }
 .kv .v{ color:var(--muted); }
 
-.qr{
-  margin-top:16px;
-  text-align:center;
-}
-.qr img{
-  width:clamp(92px, 26vw, 120px);
-  height:clamp(92px, 26vw, 120px);
-  background:#fff;
-  padding:6px;
-  border-radius:12px;
-  box-shadow:0 10px 18px rgba(0,0,0,0.20);
-}
-.qr small{ display:block; margin-top:6px; opacity:0.9; color:var(--muted); }
-
 .footer{
-  margin-top:12px;
+  margin-top:10px;
   font-size:clamp(10px, 3vw, 11px);
   opacity:0.86;
   display:flex;
@@ -233,13 +231,13 @@ body.light .icon-row button.active{
   text-align:center;
 }
 
-/* ✅ floating mode toggle (always accessible) */
+/* ✅ Dark/Light toggle positioned inside card (top-right) */
 .mode-btn{
-  position:fixed;
-  top:14px;
-  right:14px;
-  width:44px;
-  height:44px;
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:42px;
+  height:42px;
   border-radius:50%;
   border:1px solid var(--border);
   background:var(--chip);
@@ -248,25 +246,29 @@ body.light .icon-row button.active{
   place-items:center;
   cursor:pointer;
   transition:.25s ease;
-  box-shadow:0 10px 20px rgba(0,0,0,0.15);
-  z-index:999;
+  box-shadow:0 10px 20px rgba(0,0,0,0.12);
+  -webkit-tap-highlight-color: transparent;
 }
 .mode-btn:hover{ transform:scale(1.06); background:var(--chipHover); }
 
-/* ✅ EXTRA SMALL PHONES */
+/* Make absolute positioning work */
+.card{ position:relative; }
+
+/* Extra small phones */
 @media (max-width:360px){
-  .section{ max-height:56vh; }
+  .mode-btn{ top:10px; right:10px; width:40px; height:40px; }
 }
 </style>
 </head>
 
 <body>
 
-<button class="mode-btn" id="modeBtn" title="Toggle Dark/Light Mode">
-  <i class="fa-solid fa-moon"></i>
-</button>
-
 <div class="card">
+
+  <!-- ✅ Dark/Light Toggle (inside card, top-right) -->
+  <button class="mode-btn" id="modeBtn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+    <i class="fa-solid fa-moon"></i>
+  </button>
 
   <img src="eric.jpg" class="profile-img" alt="Eric Andoh"
        onerror="this.src='https://via.placeholder.com/150';">
@@ -291,156 +293,153 @@ body.light .icon-row button.active{
     <button data-target="references" onclick="show('references')" title="References"><i class="fa-solid fa-address-book"></i></button>
   </div>
 
-  <div id="profile" class="section">
-    <strong><i class="fa-solid fa-circle-info"></i> Professional Summary</strong>
-    <p>
-      A self-motivated and passionate IT student currently pursuing a Bachelor of Science in Information Technology at
-      Ghana Communication Technology University. Skilled in front-end development with a strong focus on UI/UX design,
-      modern web technologies, and graphic design. Proven ability to build real-world systems including attendance
-      platforms, academic calculators, and interactive dashboards. Also, a student leader with excellent communication,
-      teamwork, and teaching experience.
-    </p>
+  <!-- ✅ Everything below scrolls -->
+  <div class="content">
 
-    <p class="kv"><span class="k"><i class="fa-solid fa-location-dot"></i> Location:</span> <span class="v">Accra, Ghana</span></p>
-    <p class="kv"><span class="k"><i class="fa-solid fa-phone"></i> Phone:</span> <span class="v">0542044490</span></p>
-    <p class="kv"><span class="k"><i class="fa-solid fa-envelope"></i> Email:</span> <span class="v">1700148287@live.gctu.edu.gh</span></p>
-  </div>
+    <div id="profile" class="section">
+      <strong><i class="fa-solid fa-circle-info"></i> Professional Summary</strong>
+      <p>
+        A self-motivated and passionate IT student currently pursuing a Bachelor of Science in Information Technology at
+        Ghana Communication Technology University. Skilled in front-end development with a strong focus on UI/UX design,
+        modern web technologies, and graphic design. Proven ability to build real-world systems including attendance
+        platforms, academic calculators, and interactive dashboards. Also, a student leader with excellent communication,
+        teamwork, and teaching experience.
+      </p>
 
-  <div id="education" class="section">
-    <strong><i class="fa-solid fa-graduation-cap"></i> Education</strong>
-    <p><b>BSc Information Technology</b><br>
-      Ghana Communication Technology University – Accra, Ghana<br>
-      <span style="opacity:.9;">2022 – Present (Expected Graduation: 2027)</span>
-    </p>
+      <p class="kv"><span class="k"><i class="fa-solid fa-location-dot"></i> Location:</span> <span class="v">Accra, Ghana</span></p>
+      <p class="kv"><span class="k"><i class="fa-solid fa-phone"></i> Phone:</span> <span class="v">0542044490</span></p>
+      <p class="kv"><span class="k"><i class="fa-solid fa-envelope"></i> Email:</span> <span class="v">1700148287@live.gctu.edu.gh</span></p>
+    </div>
 
-    <p><b>Electricals & Electronics Engineering Technology</b><br>
-      Kikam Technical Institute – Kikam, Ghana<br>
-      <span style="opacity:.9;">Completed: June 2017</span>
-    </p>
+    <div id="education" class="section">
+      <strong><i class="fa-solid fa-graduation-cap"></i> Education</strong>
+      <p><b>BSc Information Technology</b><br>
+        Ghana Communication Technology University – Accra, Ghana<br>
+        <span style="opacity:.9;">2022 – Present (Expected Graduation: 2027)</span>
+      </p>
 
-    <p><b>Basic Education Certificate Examination (BECE)</b><br>
-      Emmanuel Preparatory School – Abura (Western Region), Ghana<br>
-      <span style="opacity:.9;">Completed: June 2014</span>
-    </p>
+      <p><b>Electricals & Electronics Engineering Technology</b><br>
+        Kikam Technical Institute – Kikam, Ghana<br>
+        <span style="opacity:.9;">Completed: June 2017</span>
+      </p>
 
-    <strong style="margin-top:12px;"><i class="fa-solid fa-certificate"></i> Certifications</strong>
-    <ul class="list">
-      <li>Honors Diploma in Networking Engineering – Soul Food ICT College (Completed: June 2021)</li>
-      <li>Honors Diploma in Digital Security – Soul Food ICT College (Completed: September 2021)</li>
-      <li>Certificate of Completion – Tech Accelerate 2024 (Lady Margaret Foundation)</li>
-      <li>Certificate of Completion – Effective Presentation (HP LIFE Online Course) – 2025</li>
-    </ul>
-  </div>
+      <p><b>Basic Education Certificate Examination (BECE)</b><br>
+        Emmanuel Preparatory School – Abura (Western Region), Ghana<br>
+        <span style="opacity:.9;">Completed: June 2014</span>
+      </p>
 
-  <div id="experience" class="section">
-    <strong><i class="fa-solid fa-briefcase"></i> Experience</strong>
+      <strong style="margin-top:12px;"><i class="fa-solid fa-certificate"></i> Certifications</strong>
+      <ul class="list">
+        <li>Honors Diploma in Networking Engineering – Soul Food ICT College (Completed: June 2021)</li>
+        <li>Honors Diploma in Digital Security – Soul Food ICT College (Completed: September 2021)</li>
+        <li>Certificate of Completion – Tech Accelerate 2024 (Lady Margaret Foundation)</li>
+        <li>Certificate of Completion – Effective Presentation (HP LIFE Online Course) – 2025</li>
+      </ul>
+    </div>
 
-    <p><b>Graphic Designer</b><br>
-      Ericsvault Hub – Accra, Ghana | Jan 2025 – Present
-    </p>
-    <ul class="list">
-      <li>Designed social media visuals to boost brand awareness.</li>
-      <li>Conducted design research to support creative strategies.</li>
-      <li>Created logos, product illustrations, and layouts for websites and print.</li>
-    </ul>
+    <div id="experience" class="section">
+      <strong><i class="fa-solid fa-briefcase"></i> Experience</strong>
 
-    <p><b>Computer Teacher</b><br>
-      Antah Academy – Accra-Abeka, Ghana | Jan 2021 – Jan 2025
-    </p>
-    <ul class="list">
-      <li>Taught basic computer hardware/software in classroom settings.</li>
-      <li>Trained students on Microsoft Office, Adobe Creative Cloud, and other tools.</li>
-      <li>Taught internet safety and responsible online behavior.</li>
-      <li>Led hands-on activities to improve student engagement.</li>
-      <li>Provided technical support to students with computer issues.</li>
-    </ul>
+      <p><b>Graphic Designer</b><br>
+        Ericsvault Hub – Accra, Ghana | Jan 2025 – Present
+      </p>
+      <ul class="list">
+        <li>Designed social media visuals to boost brand awareness.</li>
+        <li>Conducted design research to support creative strategies.</li>
+        <li>Created logos, product illustrations, and layouts for websites and print.</li>
+      </ul>
 
-    <strong style="margin-top:12px;"><i class="fa-solid fa-award"></i> Achievement</strong>
-    <p><b>Best Graphic Designer of the Year (2022)</b><br>
-      Ghana Talent and Achievement Awards
-    </p>
-  </div>
+      <p><b>Computer Teacher</b><br>
+        Antah Academy – Accra-Abeka, Ghana | Jan 2021 – Jan 2025
+      </p>
+      <ul class="list">
+        <li>Taught basic computer hardware/software in classroom settings.</li>
+        <li>Trained students on Microsoft Office, Adobe Creative Cloud, and other tools.</li>
+        <li>Taught internet safety and responsible online behavior.</li>
+        <li>Led hands-on activities to improve student engagement.</li>
+        <li>Provided technical support to students with computer issues.</li>
+      </ul>
 
-  <div id="leadership" class="section">
-    <strong><i class="fa-solid fa-users"></i> Leadership & Positions Held</strong>
+      <strong style="margin-top:12px;"><i class="fa-solid fa-award"></i> Achievement</strong>
+      <p><b>Best Graphic Designer of the Year (2022)</b><br>
+        Ghana Talent and Achievement Awards
+      </p>
+    </div>
 
-    <p><b>Course Representative – GCTU</b> (2023 – Present)<br>
-      Coordinate communication between students and lecturers.<br>
-      Support academic activities and follow up on announcements.<br>
-      Ensure class concerns are addressed.
-    </p>
+    <div id="leadership" class="section">
+      <strong><i class="fa-solid fa-users"></i> Leadership & Positions Held</strong>
 
-    <p><b>Public Relations Officer (PRO) – Concerned Youth of Enmokanwo</b> (2024 – Present)<br>
-      Handle communication and public announcements for the group.<br>
-      Share updates, event notices, and important information with members and the community.<br>
-      Support leadership in planning youth activities and engagements.
-    </p>
+      <p><b>Course Representative – GCTU</b> (2023 – Present)<br>
+        Coordinate communication between students and lecturers.<br>
+        Support academic activities and follow up on announcements.<br>
+        Ensure class concerns are addressed.
+      </p>
 
-    <p><b>Committee Chair – Entrepreneurship Club, GCTU</b> (2024 – 2025)<br>
-      Lead club activities and guide members in business-related projects.<br>
-      Support students with ideas and help drive the club’s goals.
-    </p>
+      <p><b>Public Relations Officer (PRO) – Concerned Youth of Enmokanwo</b> (2024 – Present)<br>
+        Handle communication and public announcements for the group.<br>
+        Share updates, event notices, and important information with members and the community.<br>
+        Support leadership in planning youth activities and engagements.
+      </p>
 
-    <p><b>Vice President – Ghana National Association of Adventist Students (GNAAS)</b><br>
-      Kikam Technical Institute (2016 – 2017)<br>
-      Assisted the President in leading association activities and student welfare programs.<br>
-      Coordinated meetings, events, and maintained unity within the association.
-    </p>
-  </div>
+      <p><b>Committee Chair – Entrepreneurship Club, GCTU</b> (2024 – 2025)<br>
+        Lead club activities and guide members in business-related projects.<br>
+        Support students with ideas and help drive the club’s goals.
+      </p>
 
-  <div id="skills" class="section">
-    <strong><i class="fa-solid fa-code"></i> Skills</strong>
+      <p><b>Vice President – Ghana National Association of Adventist Students (GNAAS)</b><br>
+        Kikam Technical Institute (2016 – 2017)<br>
+        Assisted the President in leading association activities and student welfare programs.<br>
+        Coordinated meetings, events, and maintained unity within the association.
+      </p>
+    </div>
 
-    <p class="kv"><span class="k"><i class="fa-solid fa-laptop-code"></i> Programming:</span>
-      <span class="v">HTML, CSS, JavaScript</span>
-    </p>
+    <div id="skills" class="section">
+      <strong><i class="fa-solid fa-code"></i> Skills</strong>
 
-    <p class="kv"><span class="k"><i class="fa-solid fa-database"></i> Database Management:</span>
-      <span class="v">MySQL, Local Storage</span>
-    </p>
+      <p class="kv"><span class="k"><i class="fa-solid fa-laptop-code"></i> Programming:</span>
+        <span class="v">HTML, CSS, JavaScript</span>
+      </p>
 
-    <p class="kv"><span class="k"><i class="fa-solid fa-screwdriver-wrench"></i> Tools & Tech:</span>
-      <span class="v">VS Code, Git, Draw.io, Adobe Creative Cloud</span>
-    </p>
+      <p class="kv"><span class="k"><i class="fa-solid fa-database"></i> Database Management:</span>
+        <span class="v">MySQL, Local Storage</span>
+      </p>
 
-    <p class="kv"><span class="k"><i class="fa-solid fa-pen-nib"></i> Design & UI/UX:</span>
-      <span class="v">UI/UX Design, Responsive Layouts, Social Media Graphics</span>
-    </p>
+      <p class="kv"><span class="k"><i class="fa-solid fa-screwdriver-wrench"></i> Tools & Tech:</span>
+        <span class="v">VS Code, Git, Draw.io, Adobe Creative Cloud</span>
+      </p>
 
-    <p class="kv"><span class="k"><i class="fa-solid fa-lightbulb"></i> Other Skills:</span>
-      <span class="v">Problem Solving, Troubleshooting, System Setup & Installation</span>
-    </p>
+      <p class="kv"><span class="k"><i class="fa-solid fa-pen-nib"></i> Design & UI/UX:</span>
+        <span class="v">UI/UX Design, Responsive Layouts, Social Media Graphics</span>
+      </p>
 
-    <strong style="margin-top:10px;"><i class="fa-solid fa-people-group"></i> Soft Skills</strong>
-    <p>Communication, Teamwork, Time Management, Leadership</p>
+      <p class="kv"><span class="k"><i class="fa-solid fa-lightbulb"></i> Other Skills:</span>
+        <span class="v">Problem Solving, Troubleshooting, System Setup & Installation</span>
+      </p>
 
-    <strong><i class="fa-solid fa-language"></i> Languages</strong>
-    <p>English, Twi, Nzema</p>
-  </div>
+      <strong style="margin-top:10px;"><i class="fa-solid fa-people-group"></i> Soft Skills</strong>
+      <p>Communication, Teamwork, Time Management, Leadership</p>
 
-  <div id="references" class="section">
-    <strong><i class="fa-solid fa-address-book"></i> Professional References</strong>
+      <strong><i class="fa-solid fa-language"></i> Languages</strong>
+      <p>English, Twi, Nzema</p>
+    </div>
 
-    <p><b>Dr. Josiah Andor</b><br>
-      Senior Lecturer, Valley View University<br>
-      <i class="fa-solid fa-phone"></i> +233 20 890 5912<br>
-      <i class="fa-solid fa-envelope"></i> joeandor@gmail.com
-    </p>
+    <div id="references" class="section">
+      <strong><i class="fa-solid fa-address-book"></i> Professional References</strong>
 
-    <p><b>Mr. Samuel Nortey</b><br>
-      Senior Lecturer, Ghana Communication Technology University<br>
-      <i class="fa-solid fa-phone"></i> +233 20 269 8193<br>
-      <i class="fa-solid fa-envelope"></i> snortey@gtuc.edu.gh
-    </p>
-  </div>
+      <p><b>Dr. Josiah Andor</b><br>
+        Senior Lecturer, Valley View University<br>
+        <i class="fa-solid fa-phone"></i> +233 20 890 5912<br>
+        <i class="fa-solid fa-envelope"></i> joeandor@gmail.com
+      </p>
 
-  <div class="qr">
-    <img
-      src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://www.linkedin.com/in/eric-andoh-49ab01335"
-      alt="LinkedIn QR Code"
-    >
-    <small><i class="fa-solid fa-qrcode"></i> Scan to open LinkedIn</small>
-  </div>
+      <p><b>Mr. Samuel Nortey</b><br>
+        Senior Lecturer, Ghana Communication Technology University<br>
+        <i class="fa-solid fa-phone"></i> +233 20 269 8193<br>
+        <i class="fa-solid fa-envelope"></i> snortey@gtuc.edu.gh
+      </p>
+    </div>
+
+  </div><!-- /content -->
 
   <div class="footer">
     <i class="fa-solid fa-id-card"></i>
