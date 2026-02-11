@@ -23,7 +23,7 @@
   --chipHover:rgba(255,255,255,0.12);
 
   /* Responsive sizes */
-  --cardW:min(420px, 94vw);
+  --cardW:min(520px, 94vw);
   --pad:clamp(14px, 3.5vw, 22px);
   --radius:clamp(16px, 3.5vw, 22px);
   --avatar:clamp(80px, 18vw, 110px);
@@ -45,11 +45,9 @@ body{
   padding:clamp(12px, 3.2vw, 22px);
   transition:background .35s ease, color .35s ease;
 
-  /* ✅ Stack layout + allow content scroll */
   display:flex;
   justify-content:center;
-  align-items:stretch;
-  overflow:hidden;
+  align-items:center;
 }
 
 /* ✅ LIGHT MODE */
@@ -76,12 +74,13 @@ body.light{
   box-shadow:0 12px 34px var(--shadow);
   text-align:center;
   transition:0.35s ease;
+  position:relative;
 
-  /* ✅ make card fill height and scroll inside */
-  height:calc(100vh - (clamp(12px, 3.2vw, 22px) * 2));
+  /* ✅ Let card grow naturally */
+  height:auto;
+  max-height:calc(100vh - (clamp(12px, 3.2vw, 22px) * 2));
   display:flex;
   flex-direction:column;
-  overflow:hidden;
 }
 
 @media (hover:hover){
@@ -165,29 +164,40 @@ body.light .icon-row button.active{
   outline:2px solid rgba(0,0,0,0.55);
 }
 
-/* ✅ SCROLL AREA (content stack) */
+/* ✅ Scroll container */
 .content{
   flex:1;
   overflow:auto;
-  padding-right:6px; /* small space for scrollbar */
+  padding-right:6px;
+  scroll-behavior:smooth;
 }
 
-/* Sections now live inside .content */
+/* ✅ Make scrolling look clean */
+.content::-webkit-scrollbar{ width:8px; }
+.content::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,0.25);
+  border-radius:999px;
+}
+body.light .content::-webkit-scrollbar-thumb{
+  background:rgba(0,0,0,0.18);
+}
+
+/* ✅ Section animation on show */
 .section{
   display:none;
   text-align:left;
   font-size:var(--body);
-  margin-top:0;
   padding:clamp(10px, 3vw, 12px);
   border-radius:clamp(12px, 3vw, 16px);
   border:1px solid var(--border);
   background:var(--chip);
-  animation:fade 0.35s ease;
+  animation:pop 0.35s ease;
+  transform-origin:top;
 }
 
-@keyframes fade{
-  from{ opacity:0; transform:translateY(10px); }
-  to{ opacity:1; transform:translateY(0); }
+@keyframes pop{
+  from{ opacity:0; transform:translateY(8px) scale(0.98); }
+  to{ opacity:1; transform:translateY(0) scale(1); }
 }
 
 .section strong{
@@ -200,7 +210,7 @@ body.light .icon-row button.active{
 .section p{
   margin:10px 0;
   color:var(--muted);
-  line-height:1.45;
+  line-height:1.55;
 }
 
 .section b{ color:var(--text); }
@@ -229,9 +239,10 @@ body.light .icon-row button.active{
   color:var(--muted);
   flex-wrap:wrap;
   text-align:center;
+  padding-top:6px;
 }
 
-/* ✅ Dark/Light toggle positioned inside card (top-right) */
+/* ✅ Mode toggle (inside card, top-right) */
 .mode-btn{
   position:absolute;
   top:12px;
@@ -248,15 +259,17 @@ body.light .icon-row button.active{
   transition:.25s ease;
   box-shadow:0 10px 20px rgba(0,0,0,0.12);
   -webkit-tap-highlight-color: transparent;
+  z-index:10;
 }
 .mode-btn:hover{ transform:scale(1.06); background:var(--chipHover); }
 
-/* Make absolute positioning work */
-.card{ position:relative; }
-
-/* Extra small phones */
-@media (max-width:360px){
-  .mode-btn{ top:10px; right:10px; width:40px; height:40px; }
+/* ✅ Mobile: make it full height nicely */
+@media (max-width:520px){
+  body{ align-items:stretch; }
+  .card{
+    max-height:none;
+    min-height:calc(100vh - (clamp(12px, 3.2vw, 22px) * 2));
+  }
 }
 </style>
 </head>
@@ -265,7 +278,6 @@ body.light .icon-row button.active{
 
 <div class="card">
 
-  <!-- ✅ Dark/Light Toggle (inside card, top-right) -->
   <button class="mode-btn" id="modeBtn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
     <i class="fa-solid fa-moon"></i>
   </button>
@@ -293,8 +305,8 @@ body.light .icon-row button.active{
     <button data-target="references" onclick="show('references')" title="References"><i class="fa-solid fa-address-book"></i></button>
   </div>
 
-  <!-- ✅ Everything below scrolls -->
-  <div class="content">
+  <!-- ✅ Scroll area -->
+  <div class="content" id="content">
 
     <div id="profile" class="section">
       <strong><i class="fa-solid fa-circle-info"></i> Professional Summary</strong>
@@ -449,9 +461,7 @@ body.light .icon-row button.active{
 </div>
 
 <script>
-/* ✅ Persist last open section even after refresh/close */
 const SECTION_KEY = "eric_identity_active_section";
-/* ✅ Persist dark/light mode */
 const MODE_KEY = "eric_identity_mode";
 
 function setMode(isLight){
@@ -467,11 +477,17 @@ function toggleMode(){
 }
 
 function show(id){
+  // hide all sections
   document.querySelectorAll('.section').forEach(s => s.style.display='none');
+  // remove active from buttons
   document.querySelectorAll('.icon-row button').forEach(b => b.classList.remove('active'));
 
   const el = document.getElementById(id);
-  if(el) el.style.display = 'block';
+  if(el){
+    el.style.display = 'block';
+    // ✅ always start at top of content when switching tabs
+    document.getElementById("content").scrollTop = 0;
+  }
 
   const btn = document.querySelector(`.icon-row button[data-target="${id}"]`);
   if(btn) btn.classList.add('active');
@@ -480,14 +496,11 @@ function show(id){
 }
 
 window.addEventListener('load', () => {
-  // Restore mode
   const savedMode = localStorage.getItem(MODE_KEY) || "dark";
   setMode(savedMode === "light");
 
-  // Mode button click
   document.getElementById("modeBtn").addEventListener("click", toggleMode);
 
-  // Restore last section
   const savedSection = localStorage.getItem(SECTION_KEY) || "profile";
   show(savedSection);
 });
