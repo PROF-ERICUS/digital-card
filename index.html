@@ -39,9 +39,7 @@
 
 *{ box-sizing:border-box; }
 
-html, body{
-  height:100%;
-}
+html, body{ height:100%; }
 
 body{
   margin:0;
@@ -50,14 +48,13 @@ body{
   color:var(--text);
   transition:background .35s ease, color .35s ease;
 
-  /* ✅ Mobile-safe centering */
   display:flex;
   justify-content:center;
   align-items:stretch;
   padding:var(--pad);
 }
 
-/* ✅ Light mode */
+/* Light mode */
 body.light{
   --bg:linear-gradient(135deg,#f0f2f5,#e4e9f2,#dce3ec);
   --glass:rgba(255,255,255,0.78);
@@ -69,7 +66,7 @@ body.light{
   --chipHover:rgba(0,0,0,0.07);
 }
 
-/* ✅ Card fills available height on small screens */
+/* Card fills height on small screens */
 .card{
   width:min(var(--maxW), 100%);
   max-width:100%;
@@ -85,14 +82,13 @@ body.light{
   text-align:center;
   position:relative;
 
-  /* Key: make internal parts fit + scroll properly */
   display:flex;
   flex-direction:column;
-  min-height:0;              /* ✅ critical for overflow children */
+  min-height:0;
   height:100%;
 }
 
-/* On larger screens, cap height nicely */
+/* On larger screens, cap height */
 @media (min-width:600px){
   .card{
     height:auto;
@@ -100,7 +96,6 @@ body.light{
   }
 }
 
-/* Avatar */
 .profile-img{
   width:var(--avatar);
   height:var(--avatar);
@@ -110,7 +105,6 @@ body.light{
   margin:0 auto 10px;
   box-shadow:0 10px 20px rgba(0,0,0,0.25);
 }
-
 body.light .profile-img{
   border:3px solid rgba(30,60,114,0.22);
 }
@@ -173,25 +167,15 @@ body.light .icon-row button.active{
   outline:2px solid rgba(0,0,0,0.55);
 }
 
-/* ✅ Scroll area takes remaining space */
+/* Scroll area */
 .content{
   flex:1;
-  min-height:0;              /* ✅ critical */
+  min-height:0;
   overflow:auto;
   padding-right:6px;
   scroll-behavior:smooth;
-
-  /* ✅ prevent footer being hidden under browser bars */
   padding-bottom:10px;
 }
-
-/* Better scrollbar (optional) */
-.content::-webkit-scrollbar{ width:8px; }
-.content::-webkit-scrollbar-thumb{
-  background:rgba(255,255,255,0.25);
-  border-radius:999px;
-}
-body.light .content::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.18); }
 
 /* Section */
 .section{
@@ -210,13 +194,7 @@ body.light .content::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.18); }
   to{ opacity:1; transform:translateY(0) scale(1); }
 }
 
-.section strong{
-  display:block;
-  margin:4px 0 10px;
-  font-size:clamp(13px, 3.8vw, 14px);
-  letter-spacing:0.2px;
-}
-
+.section strong{ display:block; margin:4px 0 10px; font-size:clamp(13px, 3.8vw, 14px); }
 .section p{ margin:10px 0; color:var(--muted); line-height:1.55; }
 .section b{ color:var(--text); }
 
@@ -227,7 +205,7 @@ body.light .content::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.18); }
 .kv .k{ font-weight:700; color:var(--text); }
 .kv .v{ color:var(--muted); }
 
-/* Footer stays visible (not under content) */
+/* Footer */
 .footer{
   margin-top:10px;
   font-size:clamp(10px, 3vw, 11px);
@@ -241,7 +219,7 @@ body.light .content::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.18); }
   text-align:center;
 }
 
-/* ✅ Dark/Light toggle placed safely (doesn't overlap) */
+/* Dark/Light toggle */
 .mode-btn{
   position:absolute;
   top:10px;
@@ -260,12 +238,6 @@ body.light .content::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.18); }
   z-index:10;
 }
 .mode-btn:hover{ transform:scale(1.06); background:var(--chipHover); }
-
-/* ✅ Small phones: slightly tighter spacing */
-@media (max-width:360px){
-  .social{ margin-top:8px; }
-  .icon-row{ margin-top:10px; }
-}
 </style>
 </head>
 
@@ -283,9 +255,19 @@ body.light .content::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.18); }
   <h2>Eric Andoh</h2>
   <div class="title">IT Student | Front-End Developer | Graphic Designer</div>
 
+  <!-- ✅ Social links (ADD your Facebook + YouTube) -->
   <div class="social">
     <a href="mailto:1700148287@live.gctu.edu.gh" title="Send Email"><i class="fa-solid fa-envelope"></i></a>
     <a href="https://wa.me/233542044490" target="_blank" title="Chat on WhatsApp" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+
+    <a href="https://www.facebook.com/share/17nWwQousJ/" target="_blank" title="Facebook" rel="noopener">
+      <i class="fa-brands fa-facebook"></i>
+    </a>
+
+    <a href="https://youtube.com/@ericustv?si=GaWj__F3WLUrUIom" target="_blank" title="YouTube" rel="noopener">
+      <i class="fa-brands fa-youtube"></i>
+    </a>
+
     <a href="https://github.com/PROF-ERICUS" target="_blank" title="View GitHub" rel="noopener"><i class="fa-brands fa-github"></i></a>
     <a href="https://prof-ericus.github.io/MULTISCH-GPA/" target="_blank" title="Open Project" rel="noopener"><i class="fa-solid fa-diagram-project"></i></a>
     <a href="https://www.linkedin.com/in/eric-andoh-49ab01335" target="_blank" title="View LinkedIn" rel="noopener"><i class="fa-brands fa-linkedin"></i></a>
@@ -445,7 +427,7 @@ body.light .content::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.18); }
       </p>
     </div>
 
-  </div><!-- /content -->
+  </div>
 
   <div class="footer">
     <i class="fa-solid fa-id-card"></i>
@@ -479,20 +461,16 @@ function show(id){
   const btn = document.querySelector(`.icon-row button[data-target="${id}"]`);
   if(btn) btn.classList.add('active');
 
-  // always start from top when switching
   document.getElementById("content").scrollTop = 0;
-
   localStorage.setItem(SECTION_KEY, id);
 }
 
 window.addEventListener('load', () => {
-  // Restore theme
   const savedMode = localStorage.getItem(MODE_KEY) || "dark";
   setMode(savedMode === "light");
 
   document.getElementById("modeBtn").addEventListener("click", toggleMode);
 
-  // Restore last section
   const savedSection = localStorage.getItem(SECTION_KEY) || "profile";
   show(savedSection);
 });
